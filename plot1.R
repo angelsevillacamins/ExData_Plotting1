@@ -32,15 +32,15 @@ colnames(Data) <- read.table(Filepath, sep = ";",stringsAsFactors =FALSE,
 Data <- unite(Data,"Date_Time",Date,Time,sep=" ")
 
 #Set date language to English
-Sys.setlocale("LC_TIME", "C")
+Sys.setlocale("LC_TIME", "English")
 
 #Conversion to Date/Time class
-Date_Time <- strptime(Data[,"Date_Time"], format = "%d/%m/%Y %T")
+Data$Date_Time <- strptime(Data[,"Date_Time"], format = "%d/%m/%Y %T")
 
 #Plot generation
 hist(Data$Global_active_power, col = "red", xlab = "Global Active Power (kilowatts)",
      main = "Global Active Power")
 
 #Saving plot
-dev.copy(png, file = "plot1.png",  width = 480, height = 480) ## Copy my plot to a PNG file
+dev.copy(png, file = "plot1.png",  width = 480, height = 480) 
 dev.off()

@@ -31,36 +31,40 @@ colnames(Data) <- read.table(Filepath, sep = ";",stringsAsFactors =FALSE,
 Data <- unite(Data,"Date_Time",Date,Time,sep=" ")
 
 #Set date language to English
-Sys.setlocale("LC_TIME", "C")
+Sys.setlocale("LC_TIME", "English")
 
 #Conversion to Date/Time class
-Date_Time <- strptime(Data[,"Date_Time"], format = "%d/%m/%Y %T")
+Data$Date_Time <- strptime(Data[,"Date_Time"], format = "%d/%m/%Y %T")
 
 #Plot generation
+
 
 par(mfrow = c(2, 2))
 
 
-plot(Date_Time, Data$Global_active_power,type="n", xlab ="",
-     ylab = "Global Active Power (kilowatts)")
-lines(Date_Time, Data$Global_active_power,type="l")
+with (Data, 
+       
+       {plot(Date_Time, Global_active_power,type="n", xlab ="",
+             ylab = "Global Active Power (kilowatts)")
+         lines(Date_Time, Global_active_power,type="l")
+         
+         plot(Date_Time, Voltage,type="n", xlab ="datetime",
+              ylab = "Voltage")
+         lines(Date_Time, Voltage,type="l")
+         
+         plot(Date_Time, Sub_metering_1,type="n", xlab ="",
+              ylab = "Energy sub metering")
+         lines(Date_Time, Sub_metering_1,type="l",col = "black")
+         lines(Date_Time, Sub_metering_2,type="l",col = "red")
+         lines(Date_Time, Sub_metering_3,type="l",col = "blue")
+         legend("topright", lty = 1, col = c("black", "red", "blue"), bty = "n" ,legend = 
+                  c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), cex = 0.75)
 
-plot(Date_Time, Data$Voltage,type="n", xlab ="datetime",
-     ylab = "Voltage")
-lines(Date_Time, Data$Voltage,type="l")
+         plot(Date_Time, Global_reactive_power,type="n", xlab ="datetime",
+              ylab = "Global_reactive_power")
+         lines(Date_Time, Global_reactive_power,type="l")
 
-plot(Date_Time, Data$Sub_metering_1,type="n", xlab ="",
-     ylab = "Energy sub metering")
-lines(Date_Time, Data$Sub_metering_1,type="l",col = "black")
-lines(Date_Time, Data$Sub_metering_2,type="l",col = "red")
-lines(Date_Time, Data$Sub_metering_3,type="l",col = "blue")
-legend("topright", lty = 1, col = c("black", "red", "blue"), bty = "n" ,legend = 
-         c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), cex = 0.75)
-
-plot(Date_Time, Data$Global_reactive_power,type="n", xlab ="datetime",
-     ylab = "Global_reactive_power")
-lines(Date_Time, Data$Global_reactive_power,type="l")
-
+})
 #Saving plot
-dev.copy(png, file = "plot4.png",  width = 480, height = 480) ## Copy my plot to a PNG file
+dev.copy(png, file = "plot4.png",  width = 480, height = 480) 
 dev.off()
